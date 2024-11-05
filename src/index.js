@@ -1,3 +1,3 @@
 import generateScore from "./generate-score.js";
 
-generateScore();
+await generateScore();

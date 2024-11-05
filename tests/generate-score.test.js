@@ -7,9 +7,19 @@ import {
   it,
   vi,
 } from "vitest";
+import { readFile } from "fs/promises";
+
 import generateScore from "../src/generate-score.js";
 
+vi.mock("fs/promises", () => ({
+  readFile: vi.fn(),
+}));
+
 const logSpy = vi.spyOn(console, "log");
+const errorSpy = vi.spyOn(console, "error");
+const mockJsonData = JSON.stringify({ test: "test" });
+
+readFile.mockResolvedValue(mockJsonData);
 
 describe("when generating a score", () => {
   const originalArgv = process.argv;
@@ -28,8 +38,8 @@ describe("when generating a score", () => {
   });
 
   describe("and a valid file is provided", () => {
-    it("produces a score", () => {
-      generateScore();
+    it("produces a score", async () => {
+      await generateScore();
       expect(logSpy).toHaveBeenCalledWith("Test score");
     });
   });
@@ -46,9 +56,11 @@ describe("when generating a score", () => {
       process.exit = originalExit;
     });
 
-    it('logs filename not provided"', () => {
-      generateScore();
-      expect(logSpy).toHaveBeenCalledWith("filename", undefined);
+    it('logs filename not provided"', async () => {
+      await generateScore();
+      expect(errorSpy).toHaveBeenCalledWith(
+        "Please provide a filename as an argument"
+      );
     });
   });
 });
