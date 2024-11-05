@@ -1,5 +1,8 @@
 const answersConfig = {
   enjoys_job: (answer) => parseYesNo(answer),
+  respected_by_managers: (answer) => parseYesNo(answer),
+  good_for_carers: (answer) => parseYesNo(answer), // should this be carers or careers?
+  unpaid_extra_work: (answer) => parseYesNo(answer),
 };
 
 const parseYesNo = (answer) => {
