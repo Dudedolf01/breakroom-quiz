@@ -1,15 +1,20 @@
 const answersConfig = {
-  enjoys_job: (answers) => parseYesNo(answers, "enjoys_job"),
+  enjoys_job: (answers) => parseYesPositive(answers, "enjoys_job"),
   respected_by_managers: (answers) =>
-    parseYesNo(answers, "respected_by_managers"),
-  good_for_carers: (answers) => parseYesNo(answers, "good_for_carers"), // should this be carers or careers?
-  unpaid_extra_work: (answers) => parseYesNo(answers, "unpaid_extra_work"),
+    parseYesPositive(answers, "respected_by_managers"),
+  good_for_carers: (answers) => parseYesPositive(answers, "good_for_carers"), // should this be carers or careers?
+  unpaid_extra_work: (answers) => parseNoPositive(answers, "unpaid_extra_work"),
   worked_overtime: (answers) => worked_overtime(answers),
 };
 
-const parseYesNo = (answers, answerKey) => {
+const parseYesPositive = (answers, answerKey) => {
   const answer = answers[answerKey];
   return answer === "yes" ? 1 : 0;
+};
+
+const parseNoPositive = (answers, answerKey) => {
+  const answer = answers[answerKey];
+  return answer === "no" ? 1 : 0;
 };
 
 const worked_overtime = (answers) => {

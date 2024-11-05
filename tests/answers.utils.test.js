@@ -12,8 +12,8 @@ describe("when parsing an answer to generate a score", () => {
     ["good_for_carers", "yes", 1],
     ["good_for_carers", "no", 0],
     ["good_for_carers", "unsure", 0],
-    ["unpaid_extra_work", "yes", 1],
-    ["unpaid_extra_work", "no", 0],
+    ["unpaid_extra_work", "yes", 0],
+    ["unpaid_extra_work", "no", 1],
     ["unpaid_extra_work", "unsure", 0],
   ])('and %s is "%s"', (field, value, expectedScore) => {
     it(`returns a score of ${expectedScore}`, () => {
@@ -22,7 +22,7 @@ describe("when parsing an answer to generate a score", () => {
     });
   });
 
-  describe.only("and they work no more than 8 hours exceeding what they are contracted", () => {
+  describe("and they work no more than 8 hours exceeding what they are contracted", () => {
     it("returns a score of 1 if worked overtime", () => {
       const input = {
         contracted_hours: 0,
