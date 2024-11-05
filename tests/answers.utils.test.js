@@ -23,18 +23,41 @@ describe("when parsing an answer to generate a score", () => {
   });
 
   describe("and they work no more than 8 hours exceeding what they are contracted", () => {
-    it("returns a score of 1 if worked overtime", () => {
+    it("returns a score of 1", () => {
       const input = {
         contracted_hours: 0,
         hours_actually_worked: 8,
       };
       expect(parseAnswersAndReturnScore(input)).toBe(1);
     });
+  });
 
-    it("and they work more than 8 hours exceeding what they are contracted", () => {
+  describe("and they work more than 8 hours exceeding what they are contracted", () => {
+    it("returns a score of 0", () => {
       const input = {
         contracted_hours: 1,
         hours_actually_worked: 10,
+      };
+      expect(parseAnswersAndReturnScore(input)).toBe(0);
+    });
+  });
+
+  // Should do more tests for the minimum wage for the different ages
+  describe("and they are paid the minimum wage", () => {
+    it("returns a score of 1", () => {
+      const input = {
+        age: 22,
+        hourly_rate: "£12.4",
+      };
+      expect(parseAnswersAndReturnScore(input)).toBe(1);
+    });
+  });
+
+  describe("and they are not paid the minimum wage", () => {
+    it("returns a score of 1", () => {
+      const input = {
+        age: 22,
+        hourly_rate: "£5.5",
       };
       expect(parseAnswersAndReturnScore(input)).toBe(0);
     });

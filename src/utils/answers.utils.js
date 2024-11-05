@@ -5,7 +5,13 @@ const answersConfig = {
   good_for_carers: (answers) => parseYesPositive(answers, "good_for_carers"), // should this be carers or careers?
   unpaid_extra_work: (answers) => parseNoPositive(answers, "unpaid_extra_work"),
   worked_overtime: (answers) => workedOvertime(answers),
-  paid_minimum_wage: (answers) => paid_minimum_wage(answers),
+  paid_minimum_wage: (answers) => paidMinimumWage(answers),
+};
+
+const minimumWageRates = {
+  over21: 11.44,
+  age18to20: 8.6,
+  under18: 6.4,
 };
 
 const parseYesPositive = (answers, answerKey) => {
@@ -24,6 +30,28 @@ const workedOvertime = (answers) => {
   const actualHours = answers.hours_actually_worked;
   const answer = actualHours - contractHours <= HOURS_THRESHOLD ? 1 : 0;
   return answer;
+};
+
+const getMinimumWageForAge = (age) => {
+  if (age >= 21) {
+    return minimumWageRates.over21;
+  } else if (age >= 18) {
+    return minimumWageRates.age18to20;
+  } else {
+    return minimumWageRates.under18;
+  }
+};
+
+const convertHourlyRateToFloat = (hourlyRate) => {
+  return hourlyRate ? parseFloat(hourlyRate.replace("£", "")) : null;
+};
+
+const paidMinimumWage = (answers) => {
+  const age = answers.age;
+  const hourlyRate = convertHourlyRateToFloat(answers.hourly_rate);
+
+  const minimumWage = getMinimumWageForAge(age);
+  return hourlyRate >= minimumWage ? 1 : 0;
 };
 
 export const parseAnswersAndReturnScore = (answers) => {
