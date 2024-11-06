@@ -6,19 +6,25 @@ As per requirement this script will read a file from the file system, parse its 
 
 ## Calculating the scores
 
+### NPM script
+
 To run the script use
 
 ```
 npm start
 ```
 
-this will read in the `answers.json` file
+this will read in the `answers.json` file and output the score
 
-Alternatively run to customise the input file
+### CLI
+
+Alternatively run
 
 ```
 node src\index.js [filename.json]
 ```
+
+to customise the input file
 
 ## Running tests
 
