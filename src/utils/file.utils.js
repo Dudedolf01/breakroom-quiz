@@ -1,4 +1,5 @@
 import { readFile as fsReadFile } from "fs/promises";
+import fs from "fs";
 
 export const readJsonFile = async (filename) => {
   try {
@@ -9,3 +10,5 @@ export const readJsonFile = async (filename) => {
     console.error(`Error reading JSON file from ${filename}`, error);
   }
 };
+
+export const fileExists = (path) => fs.existsSync(path);
