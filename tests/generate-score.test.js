@@ -30,6 +30,7 @@ const mockJsonData = JSON.stringify({
   submitted_date: 1608211454000,
 });
 
+// mocking readfile so we have no side effects in our tests
 readFile.mockResolvedValue(mockJsonData);
 
 describe("when generating a score", () => {

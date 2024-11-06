@@ -12,6 +12,7 @@ const generateScore = async () => {
   }
 
   const answers = await readJsonFile(filename);
+
   const { score, total } = parseAnswersAndReturnScore(answers);
 
   console.log(`Scores ${score}/${total}`);
