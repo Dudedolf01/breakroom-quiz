@@ -16,20 +16,38 @@ const minimumWageRates = {
 
 const parseYesPositive = (answers, answerKey) => {
   const answer = answers[answerKey];
-  return answer === "yes" ? 1 : 0;
+  if (answer === "yes") {
+    return [1, 1];
+  } else if (answer === "no") {
+    return [0, 1];
+  } else {
+    return [0, 0];
+  }
 };
 
 const parseNoPositive = (answers, answerKey) => {
   const answer = answers[answerKey];
-  return answer === "no" ? 1 : 0;
+  if (answer === "yes") {
+    return [0, 1];
+  } else if (answer === "no") {
+    return [1, 1];
+  } else {
+    return [0, 0];
+  }
 };
 
 const workedOvertime = (answers) => {
   const HOURS_THRESHOLD = 8;
   const contractHours = answers.contracted_hours;
   const actualHours = answers.hours_actually_worked;
+
+  // using == to check for null or undefined
+  if (contractHours == null || actualHours == null) {
+    return [0, 0];
+  }
+
   const answer = actualHours - contractHours <= HOURS_THRESHOLD ? 1 : 0;
-  return answer;
+  return [answer, 1];
 };
 
 const getMinimumWageForAge = (age) => {
@@ -50,16 +68,26 @@ const paidMinimumWage = (answers) => {
   const age = answers.age;
   const hourlyRate = convertHourlyRateToFloat(answers.hourly_rate);
 
+  // using == to check for null or undefined
+  if (hourlyRate == null || age == null) {
+    return [0, 0];
+  }
+
   const minimumWage = getMinimumWageForAge(age);
-  return hourlyRate >= minimumWage ? 1 : 0;
+  return hourlyRate >= minimumWage ? [1, 1] : [0, 1];
 };
 
 export const parseAnswersAndReturnScore = (answers) => {
-  return Object.keys(answersConfig).reduce((acc, key) => {
-    const answerConfig = answersConfig[key];
-    if (answerConfig) {
-      acc += answerConfig(answers);
-    }
-    return acc;
-  }, 0);
+  return Object.keys(answersConfig).reduce(
+    (acc, key) => {
+      const answerConfig = answersConfig[key];
+      if (answerConfig) {
+        const [score, addToTotal] = answerConfig(answers);
+        acc.score += score;
+        acc.total += addToTotal;
+      }
+      return acc;
+    },
+    { score: 0, total: 0 }
+  );
 };
